@@ -1,0 +1,21 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+.venv/
+venv/
+.env.local
+*.sqlite3
+.DS_Store
+.vscode/
+
+# Do not track archives or downloaded bundles
+*.zip
+*.tar.gz
+*.tgz
+*.7z
+
+# Local downloaded document folders
+temp_downloads/
+tatamotors_documents/

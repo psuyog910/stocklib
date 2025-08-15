@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StockLib - Your Business Data Library</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00aaff;
+            --secondary-color: #0077cc;
+            --accent-color: #ff00ff;
+            --light-color: #f0f0f0;
+            --dark-color: #1a1a1a;
+            --background-color: #0d0d0d;
+            --border-color: #333;
+            --success-color: #00ff00;
+            --warning-color: #ffff00;
+            --error-color: #ff0000;
+            --border-radius: 5px;
+            --box-shadow: 0 0 15px rgba(0, 170, 255, 0.5);
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--light-color);
+            background-color: var(--background-color);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--dark-color);
+            border-radius: 10px;
+            box-shadow: var(--box-shadow);
+            padding: 30px;
+            border: 1px solid var(--primary-color);
+        }
+        
+        header {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .logo {
+            width: 84px;
+            height: 84px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(0,170,255,0.06), rgba(0,119,204,0.04));
+            border-radius: 12px;
+            border: 1px solid rgba(0,170,255,0.12);
+            box-shadow: 0 4px 18px rgba(0,170,255,0.06);
+        }
+
+        .logo svg {
+            width: 56px;
+            height: 56px;
+            display: block;
+        }
+
+        .brand-title {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 0.6px;
+            text-shadow: 0 0 6px rgba(0,170,255,0.12);
+            font-weight: 700;
+        }
+
+        .tagline {
+            color: #bbb;
+            margin: 4px 0 0 0;
+            font-weight: 400;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            background-color: #2a2a2a;
+            color: var(--light-color);
+            font-family: 'Roboto', sans-serif;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-color);
+            border-radius: 3px;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+
+        .checkbox-item input[type="checkbox"]:checked {
+            background-color: var(--primary-color);
+        }
+
+        .checkbox-item input[type="checkbox"]:checked::after {
+            content: '\2713';
+            font-size: 14px;
+            color: var(--dark-color);
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        button {
+            background-color: var(--primary-color);
+            color: var(--dark-color);
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 700;
+        }
+        
+        button:hover {
+            background-color: var(--secondary-color);
+            box-shadow: 0 0 15px rgba(0, 170, 255, 0.8);
+        }
+        
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background-color: #2a2a2a;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s;
+            box-shadow: 0 0 10px var(--primary-color);
+        }
+
+        .progress-label {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            color: #0b0b0b;
+            pointer-events: none;
+        }
+        
+        .status-text {
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+            color: #aaa;
+        }
+
+        .download-info {
+            text-align: center;
+            margin-top: 8px;
+            color: #cbd5df;
+            font-size: 13px;
+        }
+        
+        .result-container {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            display: none;
+            border: 1px solid;
+        }
+        
+        .success {
+            background-color: rgba(0, 255, 0, 0.1);
+            border-color: var(--success-color);
+        }
+        
+        .error {
+            background-color: rgba(255, 0, 0, 0.1);
+            border-color: var(--error-color);
+        }
+        
+        .warning {
+            background-color: rgba(255, 255, 0, 0.1);
+            border-color: var(--warning-color);
+        }
+        
+        .download-btn {
+            background-color: var(--success-color);
+            display: inline-block;
+            text-align: center;
+            margin: 10px 0;
+            color: var(--dark-color);
+            text-decoration: none;
+            padding: 10px 15px;
+        }
+        
+        .download-btn:hover {
+            background-color: #00cc00;
+        }
+        
+        .failures-list {
+            margin-top: 15px;
+            padding-left: 20px;
+        }
+        
+        .failures-list li {
+            margin-bottom: 10px;
+        }
+        
+        .about-section {
+            background: linear-gradient(180deg, #242424, #2b2b2b);
+            padding: 18px;
+            border-radius: calc(var(--border-radius) + 2px);
+            margin-top: 30px;
+            border: 1px solid rgba(255,255,255,0.03);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.6) inset;
+        }
+
+        .about-section p,
+        .about-section li {
+            word-wrap: break-word;
+            color: #d0d6db;
+        }
+
+        .about-features {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .about-features .feature {
+            background: rgba(255,255,255,0.02);
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.02);
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .about-features {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .toggle-about {
+            background-color: #6c757d;
+            margin-bottom: 15px;
+        }
+        
+        .toggle-about:hover {
+            background-color: #5a6268;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: #6c757d;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .checkbox-group {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+                        <header>
+                                <div class="logo" aria-hidden="true">
+                                        <!-- Compact user-provided 60x60 SVG icon -->
+                                        <svg width="60" height="60" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="StockLib icon">
+                                            <!-- Background -->
+                                            <rect width="60" height="60" rx="12" fill="#0d1117" />
+
+                                            <!-- Icon -->
+                                            <g transform="translate(10, 10)">
+                                                <rect x="0" y="18" width="10" height="22" fill="#00aaff" rx="2" />
+                                                <rect x="14" y="10" width="10" height="30" fill="#00cc88" rx="2" />
+                                                <rect x="28" y="0" width="10" height="40" fill="#ffaa00" rx="2" />
+                                                <polyline points="0,32 14,20 28,12" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" />
+                                            </g>
+                                        </svg>
+                                </div>
+                                <div>
+                                        <h1 class="brand-title">StockLib </h1>
+                                        <p class="tagline">Your First Step in Fundamental Analysis – Your Business Data Library!</p>
+                                </div>
+                        </header>
+        
+        <button id="toggleAbout" class="toggle-about">About StockLib</button>
+        
+        <div id="aboutSection" class="about-section" style="display: none;">
+            <h3>About StockLib & Quick Guide</h3>
+            <p><strong>StockLib + NotebookLLM = Your AI-powered business analyst.</strong></p>
+            <p>StockLib helps you gather public company documents (annual reports, presentation decks, and concall transcripts), package them, and quickly analyze them with NotebookLLM. It's designed for investors, analysts, and students who want an organized, searchable library of company disclosures.</p>
+            <div class="about-features">
+                <div class="feature"><strong>What it fetches</strong><br>Annual reports, earning transcripts, investor presentations.</div>
+                <div class="feature"><strong>Why it helps</strong><br>Saves time, creates a single ZIP with documents, and enables fast LLM-based analysis.</div>
+            </div>
+            <ol style="margin-top:12px;">
+                <li>Enter the stock ticker (BSE/NSE).</li>
+                <li>Choose which document types to fetch.</li>
+                <li>Click "Fetch Documents" and wait — progress is shown in the UI.</li>
+                <li>Download the ZIP and/or open in NotebookLLM for analysis.</li>
+            </ol>
+            <p><em>Sources: screener.in, official company investor relations pages, and public filings.</em></p>
+        </div>
+        
+        <form id="stockForm">
+            <div class="form-group">
+                <label for="stockName">Enter the stock name (BSE/NSE ticker):</label>
+                <input type="text" id="stockName" name="stock_name" placeholder="Example: TATAMOTORS" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Select Document Types:</label>
+                <div class="checkbox-group">
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="annualReports" name="doc_types" value="Annual_Report" checked>
+                        <label for="annualReports">Annual Reports 📄</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="transcripts" name="doc_types" value="Transcript" checked>
+                        <label for="transcripts">Concall Transcripts 📝</label>
+                    </div>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="ppts" name="doc_types" value="PPT" checked>
+                        <label for="ppts">Presentations 📊</label>
+                    </div>
+                </div>
+            </div>
+            
+            <button type="submit" id="fetchBtn">🔍 Fetch Documents</button>
+        </form>
+        
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-label" id="progressLabel">0%</div>
+            </div>
+            <div class="status-text" id="statusText">Initializing downloads...</div>
+            <div class="download-info" id="downloadInfo" style="display:none;"></div>
+        </div>
+        
+        <div class="result-container success" id="successContainer">
+            <h3>✅ Success!</h3>
+            <p id="successMessage"></p>
+            <a href="#" class="download-btn" id="downloadBtn">📥 Download Documents as ZIP</a>
+            <div id="failuresSection" style="display: none;">
+                <h4>⚠️ Download Failures Reported:</h4>
+                <ul class="failures-list" id="failuresList"></ul>
+            </div>
+        </div>
+        
+        <div class="result-container error" id="errorContainer">
+            <h3>❌ Error</h3>
+            <p id="errorMessage"></p>
+        </div>
+        
+        <footer>
+            <p>StockLib is a tool for educational purposes only. Not financial advice.</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Toggle about section
+        document.getElementById('toggleAbout').addEventListener('click', function() {
+            const aboutSection = document.getElementById('aboutSection');
+            aboutSection.style.display = aboutSection.style.display === 'none' ? 'block' : 'none';
+        });
+        
+        // Handle form submission
+        document.getElementById('stockForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const stockName = document.getElementById('stockName').value.trim();
+            if (!stockName) {
+                showError("Please enter a stock name.");
+                return;
+            }
+            
+            const checkboxes = document.querySelectorAll('input[name="doc_types"]:checked');
+            const docTypes = Array.from(checkboxes).map(cb => cb.value);
+            if (docTypes.length === 0) {
+                showError("Please select at least one document type.");
+                return;
+            }
+            
+            // Prepare data for request
+            const requestData = {
+                stock_name: stockName.toUpperCase(),
+                doc_types: docTypes
+            };
+
+            // Show selected document types count and names to the user
+            const downloadInfo = document.getElementById('downloadInfo');
+            if (docTypes.length === 1) {
+                downloadInfo.textContent = `Downloading 1 document type: ${docTypes[0]}`;
+            } else {
+                downloadInfo.textContent = `Downloading ${docTypes.length} document types: ${docTypes.join(', ')}`;
+            }
+            downloadInfo.style.display = 'block';
+            
+            // Disable button and show progress
+            const fetchBtn = document.getElementById('fetchBtn');
+            fetchBtn.disabled = true;
+            fetchBtn.textContent = 'Processing...';
+            
+            // Show progress container
+            document.getElementById('progressContainer').style.display = 'block';
+            document.getElementById('statusText').textContent = 'Searching documents...';
+            // kick off a small visible progress and allow auto-advancing up to 30%
+            setProgress(5);
+            startAutoProgress(30);
+            
+            // Hide any previous results
+            document.getElementById('successContainer').style.display = 'none';
+            document.getElementById('errorContainer').style.display = 'none';
+            
+            // Make API request
+            fetch('/fetch_documents', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                // Update progress
+                document.getElementById('statusText').textContent = 'Preparing download...';
+                // stop previous auto-advance, jump to 70% and allow auto-advance up to 96%
+                stopAutoProgress();
+                setProgress(70);
+                startAutoProgress(96);
+                
+                // Show success message
+                document.getElementById('successMessage').textContent = data.message;
+                document.getElementById('downloadBtn').href = '/download/' + data.zip_filename;
+                document.getElementById('successContainer').style.display = 'block';
+                // Update downloadInfo with success summary
+                downloadInfo.textContent = `Fetched ${data.fetched_count || 'multiple'} files for ${docTypes.length} document types.`;
+                
+                // Show failures if any
+                const failuresSection = document.getElementById('failuresSection');
+                const failuresList = document.getElementById('failuresList');
+                failuresList.innerHTML = '';
+                
+                if (data.failed_docs && data.failed_docs.length > 0) {
+                    data.failed_docs.forEach(failure => {
+                        const li = document.createElement('li');
+                        let reasonText = '';
+                        
+                        switch(failure.reason) {
+                            case 'SELENIUM_DRIVER_INIT_ERROR':
+                                reasonText = 'Affected by critical browser driver initialization failure.';
+                                break;
+                            case 'DOWNLOAD_FAILED_EXCEPTION':
+                            case 'LOOP_PROCESSING_ERROR':
+                                reasonText = `An error occurred: ${failure.reason_detail || 'Undetermined error'}.`;
+                                break;
+                            case 'DOWNLOAD_FAILED_HTML_CONTENT':
+                                reasonText = 'Received HTML page instead of the expected file.';
+                                break;
+                            case 'DOWNLOAD_FAILED_TOO_SMALL':
+                                reasonText = 'Downloaded file was too small and considered invalid.';
+                                break;
+                            default:
+                                reasonText = failure.reason ? `Reason: ${failure.reason}.` : 'Download failed for an unspecified reason.';
+                        }
+                        
+                        li.innerHTML = `Could not download ${failure.type}: '${failure.base_name}'. ${reasonText} Source: <a href="${failure.url}" target="_blank">${failure.url}</a>`;
+                        failuresList.appendChild(li);
+                    });
+                    failuresSection.style.display = 'block';
+                } else {
+                    failuresSection.style.display = 'none';
+                }
+                
+                // Complete progress
+                document.getElementById('statusText').textContent = 'Download ready!';
+                // stop background auto progression and go to 100%
+                stopAutoProgress();
+                setProgress(100);
+                // small delay so user sees 100%
+                setTimeout(() => { 
+                    document.getElementById('progressContainer').style.display = 'none'; 
+                    const downloadInfo = document.getElementById('downloadInfo');
+                    downloadInfo.style.display = 'none';
+                    downloadInfo.textContent = '';
+                }, 700);
+            })
+            .catch(error => {
+                showError(error.message);
+                stopAutoProgress();
+                // leave the bar visible with current percent so user can see failure
+                const downloadInfo = document.getElementById('downloadInfo');
+                downloadInfo.textContent = 'Download failed: ' + (error.message || 'Unknown error');
+                downloadInfo.style.display = 'block';
+                document.getElementById('progressContainer').style.display = 'none';
+            })
+            .finally(() => {
+                // Re-enable button
+                fetchBtn.disabled = false;
+                fetchBtn.textContent = '🔍 Fetch Documents';
+            });
+        });
+        
+        function showError(message) {
+            document.getElementById('errorMessage').textContent = message;
+            document.getElementById('errorContainer').style.display = 'block';
+            document.getElementById('successContainer').style.display = 'none';
+        }
+
+        // Progress helpers
+        function animateNumber(el, start, end, duration) {
+            const startTime = performance.now();
+            function tick(now) {
+                const t = Math.min(1, (now - startTime) / duration);
+                const v = Math.round(start + (end - start) * t);
+                el.textContent = v + '%';
+                if (t < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+        }
+
+        function setProgress(percent) {
+            const fill = document.getElementById('progressFill');
+            const label = document.getElementById('progressLabel');
+            const current = parseInt(fill.style.width) || 0;
+            fill.style.width = percent + '%';
+            if (label) {
+                animateNumber(label, current, percent, 400);
+            }
+        }
+
+        // Auto-progress: gently increase percentage over time up to `cap`
+        let _autoInterval = null;
+        function startAutoProgress(capPercent) {
+            stopAutoProgress();
+            const fill = document.getElementById('progressFill');
+            _autoInterval = setInterval(() => {
+                const cur = parseInt(fill.style.width) || 0;
+                if (cur >= capPercent) return;
+                // increment by a value that decreases as it gets closer to cap
+                const remaining = capPercent - cur;
+                const step = Math.max(1, Math.round(remaining * 0.12));
+                setProgress(Math.min(capPercent, cur + step));
+            }, 600);
+        }
+
+        function stopAutoProgress() {
+            if (_autoInterval) {
+                clearInterval(_autoInterval);
+                _autoInterval = null;
+            }
+        }
+    </script>
+</body>
+</html>
