@@ -12,6 +12,8 @@ import random
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
+# webdriver-manager is not needed on PythonAnywhere, but we keep the import
+# in case you run it locally. The modified code below will not call it.
 from webdriver_manager.chrome import ChromeDriverManager
 import tempfile
 import shutil
@@ -174,14 +176,17 @@ def download_with_selenium(url, folder_path, base_name_no_ext, doc_type):
         selenium_temp_dir = tempfile.mkdtemp()
         prefs = {"download.default_directory": selenium_temp_dir, "download.prompt_for_download": False, "download.directory_upgrade": True, "plugins.always_open_pdf_externally": True}
         chrome_options.add_experimental_option("prefs", prefs)
-        service = None
+        
+        # <<< MODIFIED SECTION FOR PYTHONANYWHERE >>>
+        # We will directly initialize the service without ChromeDriverManager.
+        # PythonAnywhere has the necessary drivers in the system's PATH.
         try:
-            if os.path.exists("/home/appuser"): # Heuristic for Streamlit Community Cloud
-                service = Service() # Assumes chromedriver is in PATH via packages.txt
-            else: service = Service(ChromeDriverManager().install()) # Local
+            service = Service() 
             driver = webdriver.Chrome(service=service, options=chrome_options)
             driver.set_page_load_timeout(SELENIUM_PAGE_LOAD_TIMEOUT)
-        except Exception as driver_error: return None, None, "SELENIUM_DRIVER_INIT_ERROR", str(driver_error)
+        except Exception as driver_error: 
+            return None, None, "SELENIUM_DRIVER_INIT_ERROR", str(driver_error)
+        # <<< END OF MODIFIED SECTION >>>
 
         if "bseindia.com" in url: driver.get("https://www.bseindia.com/"); time.sleep(random.uniform(1,2))
         elif "nseindia.com" in url or "archives.nseindia.com" in url:
